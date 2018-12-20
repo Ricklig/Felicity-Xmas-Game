@@ -29,8 +29,8 @@ public class OctoCon : NetworkBehaviour
             cam.enabled = false;
             return;
         }
-        transform.position = new Vector3(0, 0, 0);
-        playerRB = GetComponent<Rigidbody2D>();
+        //transform.position = new Vector3(0, 0, 0);
+        playerRB = gameObject.GetComponent<Rigidbody2D>();
         //anim = GetComponent<Animator>();
         //netAnim = GetComponent<NetworkAnimator>();
         rendy = GetComponent<SpriteRenderer>();
