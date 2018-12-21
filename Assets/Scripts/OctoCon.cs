@@ -15,8 +15,8 @@ public class OctoCon : NetworkBehaviour
     //private Animator anim;
     //private NetworkAnimator netAnim;
     private SpriteRenderer rendy;
-
-    GameObject gameManager;
+    
+    private Vector2 facing;
 
     //spawn point
     private bool respawn = false;
@@ -42,6 +42,10 @@ public class OctoCon : NetworkBehaviour
     {
 
         Move();
+        if (Input.GetButtonDown("Space"))
+        {
+            interact();
+        }
 
 
     }
@@ -51,54 +55,74 @@ public class OctoCon : NetworkBehaviour
     {
         float moveHorizontal = Input.GetAxis("Horizontal") * Time.deltaTime * 5.000001f;
         float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * 5.0f;
-        /*if (Mathf.Abs(moveHorizontal) > Mathf.Abs(moveVertical))
+        if (Mathf.Abs(moveHorizontal) > Mathf.Abs(moveVertical))
         {
-            anim.SetBool("moveSide", true);
-            anim.SetBool("moveUp", false);
-            anim.SetBool("moveDown", false);
-            anim.SetBool("isMoving", true);
+            //anim.SetBool("moveSide", true);
+            //anim.SetBool("moveUp", false);
+            //anim.SetBool("moveDown", false);
+            //anim.SetBool("isMoving", true);
             if (moveHorizontal < 0)
             {
                 rendy.flipX = true;
                 facing = Vector2.left;
                 // invoke the change on the Server as you already named the function
-                CmdProvideFlipStateToServer(rendy.flipX);
+                //CmdProvideFlipStateToServer(rendy.flipX);
             }
             else if (moveHorizontal > 0)
             {
                 rendy.flipX = false;
                 facing = Vector2.right;
                 // invoke the change on the Server as you already named the function
-                CmdProvideFlipStateToServer(rendy.flipX);
+                //CmdProvideFlipStateToServer(rendy.flipX);
             }
         }
         else if (Mathf.Abs(moveHorizontal) < Mathf.Abs(moveVertical))
         {
-            anim.SetBool("moveSide", false);
-            anim.SetBool("isMoving", true);
+            //anim.SetBool("moveSide", false);
+            //anim.SetBool("isMoving", true);
             if (moveVertical > 0)
             {
                 facing = Vector2.up;
-                anim.SetBool("moveUp", true);
-                anim.SetBool("moveDown", false);
+                //anim.SetBool("moveUp", true);
+                //anim.SetBool("moveDown", false);
             }
 
             else
             {
                 facing = Vector2.down;
-                anim.SetBool("moveUp", false);
-                anim.SetBool("moveDown", true);
+                //anim.SetBool("moveUp", false);
+                //anim.SetBool("moveDown", true);
             }
 
         }
         else if (moveVertical == 0 && moveHorizontal == 0)
         {
-            anim.SetBool("isMoving", false);
+            //anim.SetBool("isMoving", false);
         }
-        */
+       
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         playerRB.transform.Translate(movement);
 
+    }
+
+    //interaction script
+    private void interact()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
+        Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
+
+        if (hit.collider != null && hit.collider.tag.Equals("Key1"))
+        {
+            CmdDestroy(GameObject.FindGameObjectWithTag("Door1"));
+        }
+        else if (hit.collider != null && hit.collider.tag.Equals("Key2"))
+        {
+            CmdDestroy(GameObject.FindGameObjectWithTag("Door2"));
+        }
+        else if (hit.collider != null && hit.collider.tag.Equals("Key3"))
+        {
+            CmdDestroy(GameObject.FindGameObjectWithTag("Door3"));
+        }
     }
 
 
@@ -108,4 +132,12 @@ public class OctoCon : NetworkBehaviour
         
     }
 
+    [Command]
+    void CmdDestroy(GameObject state)
+    {
+        // make the change local on the server
+        Debug.Log("Triggered");
+        NetworkServer.Destroy(state);
+
+    }
 }
