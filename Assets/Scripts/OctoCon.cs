@@ -128,6 +128,10 @@ public class OctoCon : NetworkBehaviour
             {
                 hit.collider.GetComponent<PicInfo>().interact();
             }
+            else if (hit.collider.tag.Equals("Door"))
+            {
+                hit.collider.GetComponent<Info>().interact();
+            }
         }
     }
 

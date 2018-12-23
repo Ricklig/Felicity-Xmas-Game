@@ -92,11 +92,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6848624154392964646}
   - component: {fileID: 6848624154392964641}
-  - component: {fileID: 6848624154392964640}
   - component: {fileID: 6848624154392964643}
   - component: {fileID: 6848624154392964652}
   - component: {fileID: 6848624154392964653}
   - component: {fileID: 6848624154392964655}
+  - component: {fileID: 1073230637854585103}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -167,32 +167,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &6848624154392964640
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6848624154392964654}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.2, y: 0.2}
-    newSize: {x: 0.2, y: 0.2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.2}
-  m_EdgeRadius: 0
 --- !u!50 &6848624154392964643
 Rigidbody2D:
   serializedVersion: 4
@@ -284,3 +258,26 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!68 &1073230637854585103
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6848624154392964654}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.1, y: 0}
+  - {x: -0.035319027, y: -0.11061805}
+  - {x: 0.10346466, y: -0.055921637}
+  - {x: 0.101733066, y: 0.050050676}
+  - {x: 0.014623463, y: 0.113986805}
+  - {x: -0.0797568, y: 0.07641451}
+  - {x: -0.09888961, y: 0.0012314916}
