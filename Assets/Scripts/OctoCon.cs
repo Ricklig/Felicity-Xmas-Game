@@ -9,13 +9,9 @@ public class OctoCon : NetworkBehaviour
 
     //imported objects
     public Camera cam;
-    public GameObject UIcam;
-    public InputField mainInputField;
 
     //for internal referencing
     private Rigidbody2D playerRB;
-    //private Animator anim;
-    //private NetworkAnimator netAnim;
     private SpriteRenderer rendy;
     
     private Vector2 facing;
@@ -32,10 +28,12 @@ public class OctoCon : NetworkBehaviour
             return;
         }
         //transform.position = new Vector3(0, 0, 0);
-        playerRB = gameObject.GetComponent<Rigidbody2D>();
+        playerRB = GetComponent<Rigidbody2D>();
         //anim = GetComponent<Animator>();
         //netAnim = GetComponent<NetworkAnimator>();
         rendy = GetComponent<SpriteRenderer>();
+
+        Debug.Log(playerRB);
 
 
     }
@@ -67,14 +65,14 @@ public class OctoCon : NetworkBehaviour
             //anim.SetBool("isMoving", true);
             if (moveHorizontal < 0)
             {
-                rendy.flipX = true;
+                //rendy.flipX = true;
                 facing = Vector2.left;
                 // invoke the change on the Server as you already named the function
                 //CmdProvideFlipStateToServer(rendy.flipX);
             }
             else if (moveHorizontal > 0)
             {
-                rendy.flipX = false;
+                //rendy.flipX = false;
                 facing = Vector2.right;
                 // invoke the change on the Server as you already named the function
                 //CmdProvideFlipStateToServer(rendy.flipX);

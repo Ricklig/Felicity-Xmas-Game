@@ -8,7 +8,6 @@ TagManager:
   - Door
   - Info
   - PInfo
-  - Key1
   layers:
   - Default
   - TransparentFX
