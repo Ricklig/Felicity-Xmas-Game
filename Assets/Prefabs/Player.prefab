@@ -227,6 +227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 5258138068965979106}
+  UIcam: {fileID: 0}
+  mainInputField: {fileID: 0}
 --- !u!114 &6848624154392964653
 MonoBehaviour:
   m_ObjectHideFlags: 0

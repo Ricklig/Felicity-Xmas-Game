@@ -9,6 +9,8 @@ public class OctoCon : NetworkBehaviour
 
     //imported objects
     public Camera cam;
+    public GameObject UIcam;
+    public InputField mainInputField;
 
     //for internal referencing
     private Rigidbody2D playerRB;
@@ -35,7 +37,9 @@ public class OctoCon : NetworkBehaviour
         //netAnim = GetComponent<NetworkAnimator>();
         rendy = GetComponent<SpriteRenderer>();
 
+
     }
+
 
     // Update is called once per frame
     void Update()
@@ -110,20 +114,23 @@ public class OctoCon : NetworkBehaviour
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
         Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
-
-        if (hit.collider != null && hit.collider.tag.Equals("Key1"))
+        if (hit.collider != null)
         {
-            CmdDestroy(GameObject.FindGameObjectWithTag("Door1"));
-        }
-        else if (hit.collider != null && hit.collider.tag.Equals("Key2"))
-        {
-            CmdDestroy(GameObject.FindGameObjectWithTag("Door2"));
-        }
-        else if (hit.collider != null && hit.collider.tag.Equals("Key3"))
-        {
-            CmdDestroy(GameObject.FindGameObjectWithTag("Door3"));
+            if (hit.collider.tag.Equals("Key"))
+            {
+                hit.collider.GetComponent<Key>().interact();
+            }
+            else if (hit.collider.tag.Equals("Info"))
+            {
+                hit.collider.GetComponent<Info>().interact();
+            }
+            else if (hit.collider.tag.Equals("PInfo"))
+            {
+                hit.collider.GetComponent<PicInfo>().interact();
+            }
         }
     }
+
 
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -140,4 +147,5 @@ public class OctoCon : NetworkBehaviour
         NetworkServer.Destroy(state);
 
     }
+
 }
