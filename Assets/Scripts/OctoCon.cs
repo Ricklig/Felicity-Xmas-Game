@@ -9,14 +9,18 @@ public class OctoCon : NetworkBehaviour
 
     //imported objects
     public Camera cam;
+    [SerializeField]
+    private AudioListener audioListener;
+    [SerializeField]
+    private Animator anim;
+
+    private GameObject UIcam;
 
     //for internal referencing
-    private Rigidbody2D playerRB;
-    //private Animator anim;
-    //private NetworkAnimator netAnim;
-    private SpriteRenderer rendy;
-
-    GameObject gameManager;
+    public Rigidbody2D playerRB;
+    public SpriteRenderer rendy;
+    
+    private Vector2 facing;
 
     //spawn point
     private bool respawn = false;
@@ -27,21 +31,39 @@ public class OctoCon : NetworkBehaviour
         if (!isLocalPlayer)
         {
             cam.enabled = false;
+            audioListener.enabled = false;
+
             return;
         }
         //transform.position = new Vector3(0, 0, 0);
-        playerRB = gameObject.GetComponent<Rigidbody2D>();
+        //playerRB = GetComponent<Rigidbody2D>();
         //anim = GetComponent<Animator>();
         //netAnim = GetComponent<NetworkAnimator>();
-        rendy = GetComponent<SpriteRenderer>();
+        //rendy = GetComponent<SpriteRenderer>();
+        UIcam = GameObject.Find("MMCan");
+        UIcam.GetComponent<Canvas>().enabled = false;
+        anim = GetComponent<Animator>();
+
+        GameObject[] playernum = GameObject.FindGameObjectsWithTag("Player");
+        if (playernum.Length > 1)
+        {
+            rendy.color = Color.cyan;
+            CmdColor();
+        }
+
 
     }
+
 
     // Update is called once per frame
     void Update()
     {
 
         Move();
+        if (Input.GetButtonDown("Space"))
+        {
+            interact();
+        }
 
 
     }
@@ -51,7 +73,7 @@ public class OctoCon : NetworkBehaviour
     {
         float moveHorizontal = Input.GetAxis("Horizontal") * Time.deltaTime * 5.000001f;
         float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * 5.0f;
-        /*if (Mathf.Abs(moveHorizontal) > Mathf.Abs(moveVertical))
+        if (Mathf.Abs(moveHorizontal) > Mathf.Abs(moveVertical))
         {
             anim.SetBool("moveSide", true);
             anim.SetBool("moveUp", false);
@@ -95,17 +117,89 @@ public class OctoCon : NetworkBehaviour
         {
             anim.SetBool("isMoving", false);
         }
-        */
+       
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         playerRB.transform.Translate(movement);
 
     }
+
+    //interaction script
+    private void interact()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1f);
+        Debug.DrawRay(transform.position, facing * 1f, Color.green, 5.5f);
+        if (hit.collider != null)
+        {
+            if (hit.collider.gameObject.layer.Equals(9))
+            {
+                hit.collider.GetComponent<Key>().interact();
+            }
+            else if (hit.collider.gameObject.layer.Equals(10))
+            {
+                hit.collider.GetComponent<Info>().interact();
+            }
+            else if (hit.collider.gameObject.layer.Equals(11))
+            {
+                hit.collider.GetComponent<PicInfo>().interact();
+            }
+            else if (hit.collider.gameObject.layer.Equals(8))
+            {
+                hit.collider.GetComponent<Info>().interact();
+            }       
+        }
+    }
+
 
 
     void OnCollisionEnter2D(Collision2D collision)
     {
 
         
+    }
+
+    [Command]
+    void CmdDestroy(GameObject state)
+    {
+        // make the change local on the server
+        Debug.Log("Triggered");
+        NetworkServer.Destroy(state);
+
+    }
+
+    [Command]
+    void CmdColor()
+    {
+        rendy.color = Color.cyan;
+        RpcColor();
+    }
+
+    [ClientRpc]
+    void RpcColor()
+    {
+        if (isLocalPlayer) return;
+        rendy.color = Color.cyan;
+    }
+
+    [Command]
+    void CmdProvideFlipStateToServer(bool state)
+    {
+        // make the change local on the server
+        rendy.flipX = state;
+
+        // forward the change also to all clients
+        RpcSendFlipState(state);
+    }
+
+    // invoked by the server only but executed on ALL clients
+    [ClientRpc]
+    void RpcSendFlipState(bool state)
+    {
+        // skip this function on the LocalPlayer
+        // because he is the one who originally invoked this
+        if (isLocalPlayer) return;
+
+        //make the change local on all clients
+        rendy.flipX = state;
     }
 
 }

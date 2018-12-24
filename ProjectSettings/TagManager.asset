@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Key
+  - Door
+  - Info
+  - PInfo
+  - Key1
   layers:
   - Default
   - TransparentFX
@@ -13,11 +18,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Door
+  - Key
+  - Info
+  - PInfo
+  - Walls
   - 
   - 
   - 
@@ -38,6 +43,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Bottom
+    uniqueID: 3945721089
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Top
+    uniqueID: 3083191671
     locked: 0
