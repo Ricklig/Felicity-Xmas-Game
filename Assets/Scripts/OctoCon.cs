@@ -9,8 +9,12 @@ public class OctoCon : NetworkBehaviour
 
     //imported objects
     public Camera cam;
+    [SerializeField]
+    private AudioListener audioListener;
+    [SerializeField]
+    private Animator anim;
 
-    public GameObject UIcam;
+    private GameObject UIcam;
 
     //for internal referencing
     public Rigidbody2D playerRB;
@@ -27,6 +31,8 @@ public class OctoCon : NetworkBehaviour
         if (!isLocalPlayer)
         {
             cam.enabled = false;
+            audioListener.enabled = false;
+
             return;
         }
         //transform.position = new Vector3(0, 0, 0);
@@ -36,6 +42,14 @@ public class OctoCon : NetworkBehaviour
         //rendy = GetComponent<SpriteRenderer>();
         UIcam = GameObject.Find("MMCan");
         UIcam.GetComponent<Canvas>().enabled = false;
+        anim = GetComponent<Animator>();
+
+        GameObject[] playernum = GameObject.FindGameObjectsWithTag("Player");
+        if (playernum.Length > 1)
+        {
+            rendy.color = Color.cyan;
+            CmdColor();
+        }
 
 
     }
@@ -61,47 +75,47 @@ public class OctoCon : NetworkBehaviour
         float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * 5.0f;
         if (Mathf.Abs(moveHorizontal) > Mathf.Abs(moveVertical))
         {
-            //anim.SetBool("moveSide", true);
-            //anim.SetBool("moveUp", false);
-            //anim.SetBool("moveDown", false);
-            //anim.SetBool("isMoving", true);
+            anim.SetBool("moveSide", true);
+            anim.SetBool("moveUp", false);
+            anim.SetBool("moveDown", false);
+            anim.SetBool("isMoving", true);
             if (moveHorizontal < 0)
             {
-                //rendy.flipX = true;
+                rendy.flipX = true;
                 facing = Vector2.left;
                 // invoke the change on the Server as you already named the function
-                //CmdProvideFlipStateToServer(rendy.flipX);
+                CmdProvideFlipStateToServer(rendy.flipX);
             }
             else if (moveHorizontal > 0)
             {
-                //rendy.flipX = false;
+                rendy.flipX = false;
                 facing = Vector2.right;
                 // invoke the change on the Server as you already named the function
-                //CmdProvideFlipStateToServer(rendy.flipX);
+                CmdProvideFlipStateToServer(rendy.flipX);
             }
         }
         else if (Mathf.Abs(moveHorizontal) < Mathf.Abs(moveVertical))
         {
-            //anim.SetBool("moveSide", false);
-            //anim.SetBool("isMoving", true);
+            anim.SetBool("moveSide", false);
+            anim.SetBool("isMoving", true);
             if (moveVertical > 0)
             {
                 facing = Vector2.up;
-                //anim.SetBool("moveUp", true);
-                //anim.SetBool("moveDown", false);
+                anim.SetBool("moveUp", true);
+                anim.SetBool("moveDown", false);
             }
 
             else
             {
                 facing = Vector2.down;
-                //anim.SetBool("moveUp", false);
-                //anim.SetBool("moveDown", true);
+                anim.SetBool("moveUp", false);
+                anim.SetBool("moveDown", true);
             }
 
         }
         else if (moveVertical == 0 && moveHorizontal == 0)
         {
-            //anim.SetBool("isMoving", false);
+            anim.SetBool("isMoving", false);
         }
        
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
@@ -150,6 +164,42 @@ public class OctoCon : NetworkBehaviour
         Debug.Log("Triggered");
         NetworkServer.Destroy(state);
 
+    }
+
+    [Command]
+    void CmdColor()
+    {
+        rendy.color = Color.cyan;
+        RpcColor();
+    }
+
+    [ClientRpc]
+    void RpcColor()
+    {
+        if (isLocalPlayer) return;
+        rendy.color = Color.cyan;
+    }
+
+    [Command]
+    void CmdProvideFlipStateToServer(bool state)
+    {
+        // make the change local on the server
+        rendy.flipX = state;
+
+        // forward the change also to all clients
+        RpcSendFlipState(state);
+    }
+
+    // invoked by the server only but executed on ALL clients
+    [ClientRpc]
+    void RpcSendFlipState(bool state)
+    {
+        // skip this function on the LocalPlayer
+        // because he is the one who originally invoked this
+        if (isLocalPlayer) return;
+
+        //make the change local on all clients
+        rendy.flipX = state;
     }
 
 }
