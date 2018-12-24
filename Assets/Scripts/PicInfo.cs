@@ -20,6 +20,7 @@ public class PicInfo : MonoBehaviour
     // Start is called before the first frame update
     public void interact()
     {
+        gameObject.GetComponent<AudioSource>().Play();
 
         UIcam.GetComponent<Canvas>().enabled = true;
 
@@ -28,6 +29,8 @@ public class PicInfo : MonoBehaviour
 
     public void close()
     {
+        gameObject.GetComponent<AudioSource>().Play();
+
         UIcam.GetComponent<Canvas>().enabled = false;
     }
 

@@ -21,14 +21,16 @@ public class Info : NetworkBehaviour
     // Start is called before the first frame update
     public void interact()
     {
-        
-            UIcam.GetComponent<Canvas>().enabled = true;
+
+        gameObject.GetComponent<AudioSource>().Play();
+        UIcam.GetComponent<Canvas>().enabled = true;
         
 
     }
 
     public void close()
     {
+        gameObject.GetComponent<AudioSource>().Play();
         UIcam.GetComponent<Canvas>().enabled = false;
     }
 

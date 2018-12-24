@@ -14,6 +14,9 @@ public class Key : NetworkBehaviour
     public GameObject door;
     public Text h;
 
+    public AudioSource beep;
+    public AudioSource boop;
+
 
     void Start()
     {
@@ -26,6 +29,8 @@ public class Key : NetworkBehaviour
     // Start is called before the first frame update
     public void interact()
     {
+       beep.Play();
+
         UIcam.GetComponent<Canvas>().enabled = true;
         mainInputField.SetActive(true);
 
@@ -33,14 +38,21 @@ public class Key : NetworkBehaviour
 
     public void close()
     {
+        beep.Play();
+
+        gameObject.GetComponent<AudioSource>().Play();
+
         UIcam.GetComponent<Canvas>().enabled = false;
         mainInputField.SetActive(false);
     }
 
     public void validate(string val)
     {
+        beep.Play();
+
         if (val.Equals(answer))
         {
+            boop.Play();
             CmdDestroy(door);
         }
 

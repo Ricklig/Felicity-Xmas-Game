@@ -10,9 +10,11 @@ public class OctoCon : NetworkBehaviour
     //imported objects
     public Camera cam;
 
+    public GameObject UIcam;
+
     //for internal referencing
-    private Rigidbody2D playerRB;
-    private SpriteRenderer rendy;
+    public Rigidbody2D playerRB;
+    public SpriteRenderer rendy;
     
     private Vector2 facing;
 
@@ -28,12 +30,12 @@ public class OctoCon : NetworkBehaviour
             return;
         }
         //transform.position = new Vector3(0, 0, 0);
-        playerRB = GetComponent<Rigidbody2D>();
+        //playerRB = GetComponent<Rigidbody2D>();
         //anim = GetComponent<Animator>();
         //netAnim = GetComponent<NetworkAnimator>();
-        rendy = GetComponent<SpriteRenderer>();
-
-        Debug.Log(playerRB);
+        //rendy = GetComponent<SpriteRenderer>();
+        UIcam = GameObject.Find("MMCan");
+        UIcam.GetComponent<Canvas>().enabled = false;
 
 
     }
@@ -110,26 +112,26 @@ public class OctoCon : NetworkBehaviour
     //interaction script
     private void interact()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1.5f);
-        Debug.DrawRay(transform.position, facing * 1.5f, Color.green, 5.5f);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, facing, 1f);
+        Debug.DrawRay(transform.position, facing * 1f, Color.green, 5.5f);
         if (hit.collider != null)
         {
-            if (hit.collider.tag.Equals("Key"))
+            if (hit.collider.gameObject.layer.Equals(9))
             {
                 hit.collider.GetComponent<Key>().interact();
             }
-            else if (hit.collider.tag.Equals("Info"))
+            else if (hit.collider.gameObject.layer.Equals(10))
             {
                 hit.collider.GetComponent<Info>().interact();
             }
-            else if (hit.collider.tag.Equals("PInfo"))
+            else if (hit.collider.gameObject.layer.Equals(11))
             {
                 hit.collider.GetComponent<PicInfo>().interact();
             }
-            else if (hit.collider.tag.Equals("Door"))
+            else if (hit.collider.gameObject.layer.Equals(8))
             {
                 hit.collider.GetComponent<Info>().interact();
-            }
+            }       
         }
     }
 

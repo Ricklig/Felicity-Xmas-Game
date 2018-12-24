@@ -8,6 +8,7 @@ TagManager:
   - Door
   - Info
   - PInfo
+  - Key1
   layers:
   - Default
   - TransparentFX
@@ -17,11 +18,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Door
+  - Key
+  - Info
+  - PInfo
+  - Walls
   - 
   - 
   - 
